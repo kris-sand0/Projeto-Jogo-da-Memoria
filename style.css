@@ -1,0 +1,253 @@
+/* Variáveis de Cores e Configurações */
+:root {
+    --bg-color: #1e1e2e;
+    --text-color: #e0e0e0;
+    --primary-color: #fab387; /* Cor de destaque (Peach) */
+    --card-back: #45475a;   /* Cor do verso da carta */
+    --card-front: #313244;  /* Cor da frente da carta */
+    --success-color: #a6e3a1; /* Verde para pares encontrados */
+    --modal-bg: rgba(0, 0, 0, 0.8);
+    --font-main: 'Outfit', sans-serif;
+}
+
+/* Reset Básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.container {
+    max-width: 800px;
+    width: 90%;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Header e Painel de Status */
+header {
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    letter-spacing: 1px;
+}
+
+.status-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05); /* Glassmorphism leve */
+    padding: 15px 25px;
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+    width: 100%;
+}
+
+.status-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.label {
+    font-size: 0.85rem;
+    opacity: 0.7;
+    text-transform: uppercase;
+}
+
+.value {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+/* Botões */
+button {
+    cursor: pointer;
+    font-family: inherit;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.btn-restart {
+    background-color: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 8px 16px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+}
+
+.btn-restart:hover {
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-top: 15px;
+}
+
+.btn-primary:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+/* Tabuleiro do Jogo */
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 colunas */
+    gap: 15px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    perspective: 1000px; /* Essencial para o efeito 3D */
+}
+
+/* Cartas */
+.card {
+    background-color: transparent;
+    aspect-ratio: 3/4; /* Proporção da carta */
+    cursor: pointer;
+    position: relative;
+    transform-style: preserve-3d; /* Permite que os filhos girem em 3D */
+    transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1); /* Curva suave */
+}
+
+/* Estado da carta: virada (flip) */
+.card.flip {
+    transform: rotateY(180deg);
+}
+
+/* Frente e Verso da Carta */
+.card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backface-visibility: hidden; /* Esconde o verso quando girado */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    font-size: 3rem; /* Tamanho do ícone/emoji */
+    user-select: none;
+}
+
+/* Verso (O lado que vemos inicialmente) */
+.card-front {
+    background-color: var(--card-back);
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: 2rem;
+    /* Padrão sutil no verso */
+    background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 10px 10px;
+}
+
+/* Frente (O lado com o ícone) */
+.card-back {
+    background-color: var(--card-front);
+    transform: rotateY(180deg); /* Já começa virada para trás */
+    border: 2px solid var(--primary-color);
+}
+
+/* Carta combinada (Matched) */
+.card.match .card-back {
+    border-color: var(--success-color);
+    box-shadow: 0 0 15px rgba(166, 227, 161, 0.4);
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--modal-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.modal.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background-color: #2a2b3d;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.modal-content h2 {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+    font-size: 1.1rem;
+    background: rgba(0,0,0,0.2);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .game-board {
+        gap: 10px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .card-face {
+        font-size: 2.5rem;
+    }
+    
+    .status-panel {
+        padding: 10px 15px;
+    }
+}
